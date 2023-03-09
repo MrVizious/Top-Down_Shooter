@@ -57,7 +57,6 @@ public class PlayerLook : MonoBehaviour
     {
         Vector2 input = c.ReadValue<Vector2>();
         // Mouse controls
-        // TODO: Change to controller, not current scheme
         if (playerInput.currentControlScheme.ToLower().Equals("keyboard and mouse"))
         {
             LookMouse(input);
