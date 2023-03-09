@@ -2,56 +2,95 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using ExtensionMethods;
 
+[RequireComponent(typeof(PlayerInput))]
 public class PlayerLook : MonoBehaviour
 {
+    PlayerInput playerInput;
     [SerializeField]
     private Transform target;
     [SerializeField]
     [Range(0, 10)]
     private float maxRange = 7f;
-    private Vector2 _worldPosition;
-    private Vector2 worldPosition
+    private enum InputFormat
+    {
+        Mouse,
+        Gamepad
+    }
+    private InputFormat lastInputFormat;
+    private Vector2 lastMouseScreenPosition;
+    private Vector2 lastJoystickInput;
+    private Vector2 _targetPosition;
+    private Vector2 targetPosition
     {
         get
         {
-            return Vector2.ClampMagnitude(_worldPosition - (Vector2)transform.position, maxRange) + (Vector2)transform.position;
+            if (lastInputFormat == InputFormat.Mouse)
+            {
+                _targetPosition = Camera.main.ScreenToWorldPoint(lastMouseScreenPosition);
+                return Vector2.ClampMagnitude(_targetPosition - (Vector2)transform.position, maxRange) + (Vector2)transform.position;
+            }
+            else if (lastInputFormat == InputFormat.Gamepad)
+            {
+                return (Vector2)transform.position + lastJoystickInput * maxRange;
+            }
+            return Vector2.zero;
         }
         set
         {
-            _worldPosition = value;
+            _targetPosition = value;
         }
     }
+
+    private void Awake()
+    {
+        playerInput = this.GetOrAddComponent<PlayerInput>();
+    }
+
     private void Update()
     {
-        target.position = worldPosition;
+        target.position = targetPosition;
     }
 
     public virtual void Look(InputAction.CallbackContext c)
     {
         Vector2 input = c.ReadValue<Vector2>();
         // Mouse controls
-        if (c.action.activeControl.device.displayName.ToLower().Equals("mouse"))
+        // TODO: Change to controller, not current scheme
+        if (playerInput.currentControlScheme.ToLower().Equals("keyboard and mouse"))
         {
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = transform.position.z;
-            worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
+            LookMouse(input);
         }
-        else
-        if (c.action.activeControl.device.displayName.ToLower().Equals("gamepad")
-            || c.action.activeControl.device.displayName.ToLower().Equals("xbox controller"))
+        else if (playerInput.currentControlScheme.ToLower().Equals("gamepad"))
         {
-            worldPosition = (Vector2)transform.position + input * maxRange;
+            LookGamepad(input);
         }
         else
         {
             Debug.Log(c.action.activeControl.device.displayName);
-            worldPosition = Vector2.zero;
         }
-
     }
+
+    protected virtual void LookMouse(Vector2 input)
+    {
+        lastInputFormat = InputFormat.Mouse;
+        Vector3 mousePos = input;
+        mousePos.z = transform.position.z;
+        lastMouseScreenPosition = mousePos;
+    }
+
+    protected virtual void LookGamepad(Vector2 input)
+    {
+        lastInputFormat = InputFormat.Gamepad;
+        lastJoystickInput = input;
+    }
+
     public virtual void Shoot(InputAction.CallbackContext c)
     {
-        Debug.Log(c.action.activeControl.device.displayName);
+        if (c.started)
+        {
+            Debug.Log(c.action.activeControl.device.displayName);
+        }
     }
 }
