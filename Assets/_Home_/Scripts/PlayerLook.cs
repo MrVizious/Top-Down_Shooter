@@ -34,17 +34,24 @@ public class PlayerLook : MonoBehaviour
         if (c.action.activeControl.device.displayName.ToLower().Equals("mouse"))
         {
             Vector3 mousePos = Input.mousePosition;
-            mousePos.z = Camera.main.nearClipPlane;
+            mousePos.z = transform.position.z;
             worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
         }
-        else if (c.action.activeControl.device.displayName.ToLower().Equals("gamepad"))
+        else
+        if (c.action.activeControl.device.displayName.ToLower().Equals("gamepad")
+            || c.action.activeControl.device.displayName.ToLower().Equals("xbox controller"))
         {
             worldPosition = (Vector2)transform.position + input * maxRange;
         }
         else
         {
+            Debug.Log(c.action.activeControl.device.displayName);
             worldPosition = Vector2.zero;
         }
 
+    }
+    public virtual void Shoot(InputAction.CallbackContext c)
+    {
+        Debug.Log(c.action.activeControl.device.displayName);
     }
 }
