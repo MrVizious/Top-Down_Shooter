@@ -51,6 +51,7 @@ public class PlayerLook : MonoBehaviour
     private void Update()
     {
         target.position = targetPosition;
+        target.up = -(targetPosition - (Vector2)transform.position);
     }
 
     public virtual void Look(InputAction.CallbackContext c)
@@ -73,7 +74,6 @@ public class PlayerLook : MonoBehaviour
 
     protected virtual void LookMouse(Vector2 input)
     {
-        Debug.Log("Last input format = Mouse");
         lastInputFormat = InputFormat.Mouse;
         Vector3 mousePos = input;
         mousePos.z = transform.position.z;
@@ -82,7 +82,6 @@ public class PlayerLook : MonoBehaviour
 
     protected virtual void LookGamepad(Vector2 input)
     {
-        Debug.Log("Last input format = Gammepad");
         lastInputFormat = InputFormat.Gamepad;
         lastJoystickInput = input;
     }
@@ -91,7 +90,7 @@ public class PlayerLook : MonoBehaviour
     {
         if (c.started)
         {
-            Debug.Log(c.action.activeControl.device.displayName);
+            Debug.Log("Shot!");
         }
     }
 }
