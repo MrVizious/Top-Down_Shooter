@@ -67,12 +67,13 @@ public class PlayerLook : MonoBehaviour
         }
         else
         {
-            Debug.Log(c.action.activeControl.device.displayName);
+            Debug.Log(c.action.activeControl.device.path);
         }
     }
 
     protected virtual void LookMouse(Vector2 input)
     {
+        Debug.Log("Last input format = Mouse");
         lastInputFormat = InputFormat.Mouse;
         Vector3 mousePos = input;
         mousePos.z = transform.position.z;
@@ -81,6 +82,7 @@ public class PlayerLook : MonoBehaviour
 
     protected virtual void LookGamepad(Vector2 input)
     {
+        Debug.Log("Last input format = Gammepad");
         lastInputFormat = InputFormat.Gamepad;
         lastJoystickInput = input;
     }

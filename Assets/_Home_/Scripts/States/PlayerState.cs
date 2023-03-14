@@ -4,8 +4,13 @@ using UnityEngine;
 using DesignPatterns;
 using UnityEngine.InputSystem;
 
-public abstract class PlayerState : State<PlayerState>
+public abstract class PlayerState : MonoBehaviour, State<PlayerState>
 {
+    public StateMachine<PlayerState> stateMachine
+    {
+        get;
+        protected set;
+    }
     public virtual void Move(InputAction.CallbackContext c) { }
     public virtual void Look(InputAction.CallbackContext c)
     {
@@ -17,4 +22,11 @@ public abstract class PlayerState : State<PlayerState>
             Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
         }
     }
+
+    public virtual void Enter(StateMachine<PlayerState> newStateMachine)
+    {
+        stateMachine = newStateMachine;
+    }
+
+    public void Exit() { }
 }

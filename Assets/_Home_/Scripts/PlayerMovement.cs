@@ -7,20 +7,10 @@ using UnityEngine.InputSystem;
 
 public class PlayerMovement : StateMachine<PlayerState>
 {
+    public float speed = 3f;
     private void Start()
     {
         ChangeToState(this.GetOrAddComponent<MovingState>());
-    }
-    public override void ChangeToPreviousState()
-    {
-        throw new System.NotImplementedException();
-    }
-
-    public override void ChangeToState(PlayerState newState)
-    {
-        currentState?.Exit(this);
-        currentState = newState;
-        newState.Enter(this);
     }
 
     public override void SubstituteStateWith(PlayerState newState)
@@ -33,7 +23,5 @@ public class PlayerMovement : StateMachine<PlayerState>
         currentState.Move(c);
     }
 
-    public void Look(InputAction.CallbackContext c)
-    {
-    }
+    public void Look(InputAction.CallbackContext c) { }
 }
