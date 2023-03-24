@@ -13,12 +13,23 @@ public class MovingState : PlayerState
     private Rigidbody2D rb;
     public override void Enter(StateMachine<PlayerState> newStateMachine)
     {
-        rb = this.GetOrAddComponent<Rigidbody2D>();
+        Debug.Log("Entering moving state");
+        base.Enter(newStateMachine);
+        rb = ((PlayerController)stateMachine).rb;
     }
 
     public override void Move(InputAction.CallbackContext c)
     {
         lastMovementInput = c.ReadValue<Vector2>();
+        if (lastMovementInput.sqrMagnitude < 0.1f)
+        {
+            stateMachine.ChangeToState(this.GetOrAddComponent<IdleState>());
+        }
+    }
+
+    public override void Dash()
+    {
+        stateMachine.SubstituteStateWith(this.GetOrAddComponent<DashingState>());
     }
 
     private void FixedUpdate()

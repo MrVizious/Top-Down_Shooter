@@ -23,10 +23,16 @@ public abstract class PlayerState : MonoBehaviour, State<PlayerState>
         }
     }
 
+    public virtual void Dash() { }
+
     public virtual void Enter(StateMachine<PlayerState> newStateMachine)
     {
+        this.enabled = true;
         stateMachine = newStateMachine;
     }
 
-    public void Exit() { }
+    public void Exit()
+    {
+        this.enabled = false;
+    }
 }

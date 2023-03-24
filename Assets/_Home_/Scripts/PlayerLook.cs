@@ -51,21 +51,24 @@ public class PlayerLook : MonoBehaviour
     private void Update()
     {
         target.position = targetPosition;
-        target.up = -(targetPosition - (Vector2)transform.position);
+        //target.up = -(targetPosition - (Vector2)transform.position);
     }
 
     public virtual void Look(InputAction.CallbackContext c)
     {
         Vector2 input = c.ReadValue<Vector2>();
+
         // Mouse controls
         if (playerInput.currentControlScheme.ToLower().Equals("keyboard and mouse"))
         {
             LookMouse(input);
         }
+        // Gamepad controls
         else if (playerInput.currentControlScheme.ToLower().Equals("gamepad"))
         {
             LookGamepad(input);
         }
+        // Whatever else
         else
         {
             Debug.Log(c.action.activeControl.device.path);

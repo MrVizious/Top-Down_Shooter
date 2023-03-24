@@ -14,7 +14,6 @@ public class ParallaxLayer : MonoBehaviour
         length = GetComponent<SpriteRenderer>().bounds.size.x;
     }
 
-    // Update is called once per frame
     void Update()
     {
         float distance = cam.transform.position.x * parallaxFactor;
