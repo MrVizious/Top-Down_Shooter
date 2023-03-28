@@ -12,13 +12,14 @@ public abstract class PlayerState : MonoBehaviour, State<PlayerState>
         protected set;
     }
     public virtual void Move(InputAction.CallbackContext c) { }
-
     public virtual void Dash() { }
+    protected PlayerData playerData;
 
     public virtual void Enter(StateMachine<PlayerState> newStateMachine)
     {
         this.enabled = true;
         stateMachine = newStateMachine;
+        playerData = ((PlayerController)stateMachine).playerData;
     }
 
     public virtual void Exit()

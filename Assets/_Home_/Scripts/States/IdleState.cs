@@ -12,14 +12,23 @@ public class IdleState : PlayerState
     {
         //Debug.Log("Entering idle state");
         base.Enter(newStateMachine);
-    }
-    public override void Move(InputAction.CallbackContext c)
-    {
-        if (c.ReadValue<Vector2>().sqrMagnitude > 0.1f)
+        if (playerData.lastMovementInput.sqrMagnitude > 0.1f)
         {
             stateMachine.ChangeToState(this.GetOrAddComponent<MovingState>());
+            return;
         }
     }
+
+    public override void Move(InputAction.CallbackContext c)
+    {
+        base.Move(c);
+        if (playerData.lastMovementInput.sqrMagnitude > 0.1f)
+        {
+            stateMachine.ChangeToState(this.GetOrAddComponent<MovingState>());
+            return;
+        }
+    }
+
     public override void Dash()
     {
         DashingState dashingState = this.GetOrAddComponent<DashingState>();

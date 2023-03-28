@@ -11,7 +11,7 @@ public class PlayerLook : MonoBehaviour
     [SerializeField]
     private Transform target;
     [SerializeField]
-    [Range(0, 10)]
+    [Range(0, 20)]
     private float maxRange = 7f;
     private enum InputFormat
     {

@@ -22,14 +22,14 @@ public class PlayerController : StateMachine<PlayerState>
 
     public void Movement(InputAction.CallbackContext c)
     {
+        playerData.lastMovementInput = c.ReadValue<Vector2>();
         currentState.Move(c);
     }
 
 
     public void Dash(InputAction.CallbackContext c)
     {
-        Debug.Log("Trying to dash");
-        if (c.performed)
+        if (c.started)
             currentState.Dash();
     }
 
