@@ -36,4 +36,11 @@ public class MovingState : PlayerState
     {
         rb.MovePosition((Vector2)rb.position + playerController.lastMovementInput * playerData.speed * Time.deltaTime);
     }
+
+    private void OnCollisionStay2D(Collision2D other)
+    {
+        if (other.collider.CompareTag("Pit"))
+        {
+        }
+    }
 }

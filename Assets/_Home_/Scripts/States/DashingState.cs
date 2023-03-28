@@ -13,11 +13,36 @@ public class DashingState : PlayerState
     private Rigidbody2D rb;
     public override void Enter(StateMachine<PlayerState> newStateMachine)
     {
-        //Debug.Log("Entering dash state");
         base.Enter(newStateMachine);
+        if (TryingToDashAgainstTouchingCollider())
+        {
+            playerController.ChangeToPreviousState();
+            return;
+        }
         rb = playerController.rb;
         Dashing().Forget();
         UniTaskMethods.DelayedFunction(() => StopDashing(), playerData.dashDuration).Forget();
+    }
+
+    private bool TryingToDashAgainstTouchingCollider()
+    {
+        // If the player is against one or more walls, check if they are trying to dash against them
+        if (playerController.touchingColliders.Count <= 0)
+        {
+            return false;
+        }
+        LayerMask mask = ~LayerMask.GetMask("Player", "Camera", "Enemy");
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 3f, mask);
+        Collider2D hitCol = hit.collider;
+        //Debug.DrawRay(transform.position, direction * 3f, Color.green, 2f);
+        foreach (Collider2D col in playerController.touchingColliders)
+        {
+            if (col.Equals(hitCol))
+            {
+                return true;
+            }
+        }
+        return false;
     }
 
     private async UniTask Dashing()
@@ -32,9 +57,16 @@ public class DashingState : PlayerState
 
     public void StopDashing()
     {
+        if (dashing == false) return;
         dashing = false;
-        Debug.Log("Stopping dash");
         playerController.ChangeToPreviousState();
     }
 
+    private void OnCollisionEnter2D(Collision2D other)
+    {
+        if (other.collider.CompareTag("Pit"))
+        {
+            StopDashing();
+        }
+    }
 }
