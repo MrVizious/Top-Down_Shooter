@@ -12,16 +12,6 @@ public abstract class PlayerState : MonoBehaviour, State<PlayerState>
         protected set;
     }
     public virtual void Move(InputAction.CallbackContext c) { }
-    public virtual void Look(InputAction.CallbackContext c)
-    {
-        // Mouse controls
-        if (c.action.activeControl.device.displayName.Equals("Mouse"))
-        {
-            Vector3 mousePos = Input.mousePosition;
-            mousePos.z = Camera.main.nearClipPlane;
-            Vector3 worldPosition = Camera.main.ScreenToWorldPoint(mousePos);
-        }
-    }
 
     public virtual void Dash() { }
 
@@ -31,7 +21,7 @@ public abstract class PlayerState : MonoBehaviour, State<PlayerState>
         stateMachine = newStateMachine;
     }
 
-    public void Exit()
+    public virtual void Exit()
     {
         this.enabled = false;
     }

@@ -6,22 +6,25 @@ using UnityEngine.InputSystem;
 using DesignPatterns;
 
 [RequireComponent(typeof(Rigidbody2D))]
+[RequireComponent(typeof(PlayerLook))]
 public class PlayerController : StateMachine<PlayerState>
 {
-    public Rigidbody2D rb { get; private set; }
+
+    public PlayerData playerData;
+    [HideInInspector] public Rigidbody2D rb { get; private set; }
+    [HideInInspector] public PlayerLook playerLook { get; private set; }
     private void Start()
     {
         rb = this.GetOrAddComponent<Rigidbody2D>();
+        playerLook = this.GetOrAddComponent<PlayerLook>();
         ChangeToState(this.GetOrAddComponent<IdleState>());
     }
-    public float speed = 3f;
 
     public void Movement(InputAction.CallbackContext c)
     {
         currentState.Move(c);
     }
 
-    public void Look(InputAction.CallbackContext c) { }
 
     public void Dash(InputAction.CallbackContext c)
     {

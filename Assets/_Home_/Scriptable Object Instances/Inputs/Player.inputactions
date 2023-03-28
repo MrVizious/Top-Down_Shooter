@@ -33,7 +33,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Jump",
+                    "name": "Dash",
                     "type": "Button",
                     "id": "2f0ef91c-68ae-441a-9299-865edd8dc5c9",
                     "expectedControlType": "Button",
@@ -160,7 +160,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard and Mouse",
-                    "action": "Jump",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -171,7 +171,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Gamepad",
-                    "action": "Jump",
+                    "action": "Dash",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

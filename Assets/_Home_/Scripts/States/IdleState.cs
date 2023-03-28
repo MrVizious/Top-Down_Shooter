@@ -10,7 +10,7 @@ public class IdleState : PlayerState
 
     public override void Enter(StateMachine<PlayerState> newStateMachine)
     {
-        Debug.Log("Entering idle state");
+        //Debug.Log("Entering idle state");
         base.Enter(newStateMachine);
     }
     public override void Move(InputAction.CallbackContext c)
@@ -22,6 +22,8 @@ public class IdleState : PlayerState
     }
     public override void Dash()
     {
-        stateMachine.ChangeToState(this.GetOrAddComponent<DashingState>());
+        DashingState dashingState = this.GetOrAddComponent<DashingState>();
+        dashingState.direction = ((PlayerController)stateMachine).playerLook.lookDirection;
+        stateMachine.ChangeToState(dashingState);
     }
 }

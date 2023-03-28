@@ -43,6 +43,14 @@ public class PlayerLook : MonoBehaviour
         }
     }
 
+    public Vector2 lookDirection
+    {
+        get
+        {
+            return (targetPosition - (Vector2)transform.position).normalized;
+        }
+    }
+
     private void Awake()
     {
         playerInput = this.GetOrAddComponent<PlayerInput>();

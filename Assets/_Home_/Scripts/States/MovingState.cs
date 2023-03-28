@@ -8,14 +8,15 @@ using DesignPatterns;
 [RequireComponent(typeof(Rigidbody2D))]
 public class MovingState : PlayerState
 {
-    public float speed = 3f;
     private Vector2 lastMovementInput = Vector2.zero;
     private Rigidbody2D rb;
+    private PlayerData playerData;
     public override void Enter(StateMachine<PlayerState> newStateMachine)
     {
-        Debug.Log("Entering moving state");
+        //Debug.Log("Entering moving state");
         base.Enter(newStateMachine);
         rb = ((PlayerController)stateMachine).rb;
+        playerData = ((PlayerController)stateMachine).playerData;
     }
 
     public override void Move(InputAction.CallbackContext c)
@@ -29,11 +30,13 @@ public class MovingState : PlayerState
 
     public override void Dash()
     {
-        stateMachine.SubstituteStateWith(this.GetOrAddComponent<DashingState>());
+        DashingState dashingState = this.GetOrAddComponent<DashingState>();
+        dashingState.direction = lastMovementInput.normalized;
+        stateMachine.SubstituteStateWith(dashingState);
     }
 
     private void FixedUpdate()
     {
-        rb.MovePosition((Vector2)rb.position + lastMovementInput * speed * Time.deltaTime);
+        rb.MovePosition((Vector2)rb.position + lastMovementInput * playerData.speed * Time.deltaTime);
     }
 }
