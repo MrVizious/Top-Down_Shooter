@@ -13,6 +13,7 @@ public class PlayerController : StateMachine<PlayerState>
     public PlayerData playerData;
     [HideInInspector] public Rigidbody2D rb { get; private set; }
     [HideInInspector] public PlayerLook playerLook { get; private set; }
+    [HideInInspector] public Vector2 lastMovementInput;
     private void Start()
     {
         rb = this.GetOrAddComponent<Rigidbody2D>();
@@ -22,7 +23,7 @@ public class PlayerController : StateMachine<PlayerState>
 
     public void Movement(InputAction.CallbackContext c)
     {
-        playerData.lastMovementInput = c.ReadValue<Vector2>();
+        lastMovementInput = c.ReadValue<Vector2>();
         currentState.Move(c);
     }
 

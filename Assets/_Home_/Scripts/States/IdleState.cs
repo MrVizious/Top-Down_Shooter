@@ -12,9 +12,9 @@ public class IdleState : PlayerState
     {
         //Debug.Log("Entering idle state");
         base.Enter(newStateMachine);
-        if (playerData.lastMovementInput.sqrMagnitude > 0.1f)
+        if (playerController.lastMovementInput.sqrMagnitude > 0.1f)
         {
-            stateMachine.ChangeToState(this.GetOrAddComponent<MovingState>());
+            playerController.ChangeToState(this.GetOrAddComponent<MovingState>());
             return;
         }
     }
@@ -22,9 +22,9 @@ public class IdleState : PlayerState
     public override void Move(InputAction.CallbackContext c)
     {
         base.Move(c);
-        if (playerData.lastMovementInput.sqrMagnitude > 0.1f)
+        if (playerController.lastMovementInput.sqrMagnitude > 0.1f)
         {
-            stateMachine.ChangeToState(this.GetOrAddComponent<MovingState>());
+            playerController.ChangeToState(this.GetOrAddComponent<MovingState>());
             return;
         }
     }
@@ -32,7 +32,7 @@ public class IdleState : PlayerState
     public override void Dash()
     {
         DashingState dashingState = this.GetOrAddComponent<DashingState>();
-        dashingState.direction = ((PlayerController)stateMachine).playerLook.lookDirection;
-        stateMachine.ChangeToState(dashingState);
+        dashingState.direction = playerController.playerLook.lookDirection;
+        playerController.ChangeToState(dashingState);
     }
 }

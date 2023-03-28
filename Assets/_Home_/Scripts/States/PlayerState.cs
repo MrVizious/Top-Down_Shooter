@@ -6,6 +6,13 @@ using UnityEngine.InputSystem;
 
 public abstract class PlayerState : MonoBehaviour, State<PlayerState>
 {
+    public PlayerController playerController
+    {
+        get
+        {
+            return ((PlayerController)stateMachine);
+        }
+    }
     public StateMachine<PlayerState> stateMachine
     {
         get;

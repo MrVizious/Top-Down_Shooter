@@ -13,27 +13,27 @@ public class MovingState : PlayerState
     {
         //Debug.Log("Entering moving state");
         base.Enter(newStateMachine);
-        rb = ((PlayerController)stateMachine).rb;
+        rb = playerController.rb;
     }
 
     public override void Dash()
     {
         DashingState dashingState = this.GetOrAddComponent<DashingState>();
-        dashingState.direction = playerData.lastMovementInput.normalized;
-        stateMachine.SubstituteStateWith(dashingState);
+        dashingState.direction = playerController.lastMovementInput.normalized;
+        playerController.SubstituteStateWith(dashingState);
     }
 
     private void Update()
     {
-        if (playerData.lastMovementInput.sqrMagnitude < 0.1f)
+        if (playerController.lastMovementInput.sqrMagnitude < 0.1f)
         {
-            stateMachine.ChangeToState(this.GetOrAddComponent<IdleState>());
+            playerController.ChangeToState(this.GetOrAddComponent<IdleState>());
             return;
         }
     }
 
     private void FixedUpdate()
     {
-        rb.MovePosition((Vector2)rb.position + playerData.lastMovementInput * playerData.speed * Time.deltaTime);
+        rb.MovePosition((Vector2)rb.position + playerController.lastMovementInput * playerData.speed * Time.deltaTime);
     }
 }

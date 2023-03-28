@@ -6,5 +6,4 @@ using UnityEngine;
 public class PlayerData : ScriptableObject
 {
     public float speed, dashSpeed, dashDuration;
-    public Vector2 lastMovementInput;
 }

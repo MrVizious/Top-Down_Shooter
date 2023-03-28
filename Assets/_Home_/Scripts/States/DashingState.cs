@@ -15,7 +15,7 @@ public class DashingState : PlayerState
     {
         //Debug.Log("Entering dash state");
         base.Enter(newStateMachine);
-        rb = ((PlayerController)stateMachine).rb;
+        rb = playerController.rb;
         Dashing().Forget();
         UniTaskMethods.DelayedFunction(() => StopDashing(), playerData.dashDuration).Forget();
     }
@@ -34,7 +34,7 @@ public class DashingState : PlayerState
     {
         dashing = false;
         Debug.Log("Stopping dash");
-        stateMachine.ChangeToPreviousState();
+        playerController.ChangeToPreviousState();
     }
 
 }
