@@ -4,10 +4,9 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using ExtensionMethods;
 
-[RequireComponent(typeof(PlayerInput))]
 public class PlayerLook : MonoBehaviour
 {
-    PlayerInput playerInput;
+    [SerializeField] private PlayerInput playerInput;
     [SerializeField]
     private Transform target;
     [SerializeField]
@@ -49,11 +48,6 @@ public class PlayerLook : MonoBehaviour
         {
             return (targetPosition - (Vector2)transform.position).normalized;
         }
-    }
-
-    private void Awake()
-    {
-        playerInput = this.GetOrAddComponent<PlayerInput>();
     }
 
     private void Update()
