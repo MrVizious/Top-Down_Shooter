@@ -26,10 +26,11 @@ public abstract class GunState : MonoBehaviour, State<GunState>
     public virtual void Enter(StateMachine<GunState> newStateMachine)
     {
         stateMachine = newStateMachine;
+        this.enabled = true;
     }
 
     public virtual void Exit()
     {
-        this.enabled = false;
+        Destroy(this);
     }
 }

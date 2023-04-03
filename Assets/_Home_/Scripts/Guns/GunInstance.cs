@@ -16,4 +16,12 @@ public class GunInstance
         this.currentBullets = currentBullets < 0 ? gun.magazineSize : currentBullets;
         this.currentBullets = extraBullets < 0 ? gun.magazineSize : extraBullets;
     }
+
+    public void Reload()
+    {
+        int desiredBulletsToReload = gun.magazineSize - currentBullets;
+        int actualBulletsToReload = Mathf.Min(extraBullets, desiredBulletsToReload);
+        currentBullets += actualBulletsToReload;
+        extraBullets -= actualBulletsToReload;
+    }
 }

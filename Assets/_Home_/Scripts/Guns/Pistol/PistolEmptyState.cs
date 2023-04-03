@@ -3,21 +3,25 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using ExtensionMethods;
-using DesignPatterns;
 
-public class PistolReadyState : GunState
+public class PistolEmptyState : GunState
 {
-
     public override void Shoot(InputAction.CallbackContext c)
     {
-        if (c.started)
-            gunController.ChangeToState(this.GetOrAddComponent<PistolShootingState>());
+        if (gunController.currentGun.extraBullets > 0)
+        {
+            gunController.SubstituteStateWith(this.GetOrAddComponent<PistolReloadingState>());
+        }
+        /*
+            else{
+                //play sound
+            }
+        */
     }
-
     public override void Reload(InputAction.CallbackContext c)
     {
         if (gunController.currentGun.currentBullets >= gunController.currentGun.gun.magazineSize) return;
-        gunController.ChangeToState(this.GetOrAddComponent<PistolReloadingState>());
+        gunController.SubstituteStateWith(this.GetOrAddComponent<PistolReloadingState>());
     }
 
     public override void Exit()

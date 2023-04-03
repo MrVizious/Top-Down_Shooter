@@ -9,6 +9,7 @@ public class PistolShootingState : GunState
     public override void Enter(StateMachine<GunState> newStateMachine)
     {
         base.Enter(newStateMachine);
+        gunController.currentGun.currentBullets--;
         Debug.Log("Pium");
         gunController.SubstituteStateWith(this.GetOrAddComponent<PistolCooldownState>());
     }

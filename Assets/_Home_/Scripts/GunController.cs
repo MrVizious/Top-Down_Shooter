@@ -68,7 +68,8 @@ public class GunController : StateMachine<GunState>
 
     public void Reload(InputAction.CallbackContext c)
     {
-        currentState?.Reload(c);
+        if (c.performed)
+            currentState?.Reload(c);
     }
 
     #endregion
