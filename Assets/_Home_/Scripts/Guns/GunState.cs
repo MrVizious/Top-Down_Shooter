@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using DesignPatterns;
 using UnityEngine.InputSystem;
+using ExtensionMethods;
 
 public abstract class GunState : MonoBehaviour, State<GunState>
 {
@@ -20,12 +21,15 @@ public abstract class GunState : MonoBehaviour, State<GunState>
     }
 
     public virtual void Shoot(InputAction.CallbackContext c) { }
+    public virtual void Reload(InputAction.CallbackContext c) { }
 
     public virtual void Enter(StateMachine<GunState> newStateMachine)
     {
         stateMachine = newStateMachine;
-        Debug.Log("Wow, you just got a pistol!");
     }
 
-    public virtual void Exit() { }
+    public virtual void Exit()
+    {
+        this.enabled = false;
+    }
 }
