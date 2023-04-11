@@ -30,11 +30,33 @@ public class GunController : StateMachine<GunState>
             _currentGun = value;
         }
     }
+
+    public GunReadyState currentGunReadyState => (GunReadyState)this.GetOrAddComponent(currentGun.gunData.readyState);
+    public GunChargingState currentGunChargingState => (GunChargingState)this.GetOrAddComponent(currentGun.gunData.chargingState);
+    public GunCooldownState currentGunCooldownState => (GunCooldownState)this.GetOrAddComponent(currentGun.gunData.cooldownState);
+    public GunEmptyState currentGunEmptyState => (GunEmptyState)this.GetOrAddComponent(currentGun.gunData.emptyState);
+    public GunReloadingState currentGunReloadingState => (GunReloadingState)this.GetOrAddComponent(currentGun.gunData.reloadingState);
+    public GunShootingState currentGunShootingState => (GunShootingState)this.GetOrAddComponent(currentGun.gunData.shootingState);
+
+    [Button]
+    public void ClearStates()
+    {
+        currentState = null;
+        stateStack.Clear();
+        foreach (GunState state in transform.GetComponents<GunState>())
+        {
+            Destroy(state);
+        }
+
+    }
     [SerializeField] private List<GunInstance> acquiredGuns;
     private void Start()
     {
-        GunState initialState = (GunState)this.GetOrAddComponent(Type.GetType(currentGun.gun.initialStateName));
-        ChangeToState(initialState);
+        PrepareCurrentGun();
+    }
+    private void PrepareCurrentGun()
+    {
+        ChangeToState(currentGunReadyState);
     }
 
     #region Gun Selection
@@ -52,9 +74,27 @@ public class GunController : StateMachine<GunState>
     [Button]
     public void RemoveCurrentGun()
     {
+        ClearStates();
         GunInstance gunToRemove = currentGun;
         currentGun = acquiredGuns[(acquiredGuns.IndexOf(currentGun) + 1) % acquiredGuns.Count];
         acquiredGuns.Remove(gunToRemove);
+    }
+
+    private void ChangeGunTowards(int stepsToTake)
+    {
+        ClearStates();
+        if (acquiredGuns.Count <= 1) return;
+        currentGun = acquiredGuns[(acquiredGuns.IndexOf(currentGun) + stepsToTake) % acquiredGuns.Count];
+        PrepareCurrentGun();
+    }
+
+    public void NextGun()
+    {
+        ChangeGunTowards(1);
+    }
+    public void PreviousGun()
+    {
+        ChangeGunTowards(-1);
     }
 
     #endregion

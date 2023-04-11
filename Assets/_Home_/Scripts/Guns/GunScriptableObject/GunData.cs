@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Sirenix.OdinInspector;
+using TypeReferences;
 
 [CreateAssetMenu(fileName = "GunData", menuName = "Top-Down Shooter/GunData", order = 0)]
 public class GunData : ScriptableObject
@@ -12,27 +13,30 @@ public class GunData : ScriptableObject
     public bool hasCooldown;
     [ShowIf("hasCooldown")]
     public float cooldownSeconds;
-    public bool hasChargingTime;
-    [ShowIf("hasChargingTime")]
+    public bool hasCharging;
+    [ShowIf("hasCharging")]
     public float chargeSeconds = 0f;
-    [Header("State machine information")]
-    public string initialStateName = "";
 
-    private void OnEnable()
-    {
-        SetInitialStateName();
-    }
-    private void OnValidate()
-    {
-        SetInitialStateName();
-    }
+    [Header("Gun information")]
+    [Inherits(typeof(GunReadyState), IncludeBaseType = true)]
 
-    private void SetInitialStateName()
-    {
-        if (initialStateName.Equals("") || initialStateName.Equals("ReadyState"))
-        {
-            initialStateName = name + "ReadyState";
-        }
-    }
+    public TypeReference readyState;
+    [Inherits(typeof(GunShootingState), IncludeBaseType = true)]
+
+    public TypeReference shootingState;
+    [Inherits(typeof(GunEmptyState), IncludeBaseType = true)]
+    public TypeReference emptyState;
+    [Inherits(typeof(GunReloadingState), IncludeBaseType = true)]
+
+    public TypeReference reloadingState;
+    [ShowIf("hasCharging")]
+    [Inherits(typeof(GunChargingState), IncludeBaseType = true)]
+
+    public TypeReference chargingState;
+    [ShowIf("hasCooldown")]
+    [Inherits(typeof(GunCooldownState), IncludeBaseType = true)]
+
+    public TypeReference cooldownState;
+
 
 }

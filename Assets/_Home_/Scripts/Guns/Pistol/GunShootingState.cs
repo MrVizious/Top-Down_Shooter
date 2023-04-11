@@ -4,14 +4,21 @@ using DesignPatterns;
 using UnityEngine;
 using ExtensionMethods;
 
-public class PistolShootingState : GunState
+public class GunShootingState : GunState
 {
     public override void Enter(StateMachine<GunState> newStateMachine)
     {
         base.Enter(newStateMachine);
         gunController.currentGun.currentBullets--;
         Debug.Log("Pium");
-        gunController.SubstituteStateWith(this.GetOrAddComponent<PistolCooldownState>());
+        if (gunController.currentGun.gunData.hasCooldown)
+        {
+            gunController.SubstituteStateWith(gunController.currentGunCooldownState);
+        }
+        else
+        {
+            gunController.SubstituteStateWith(gunController.currentGunReadyState);
+        }
     }
 
     public override void Exit()

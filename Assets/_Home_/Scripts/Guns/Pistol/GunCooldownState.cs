@@ -7,31 +7,32 @@ using ExtensionMethods;
 using Cysharp.Threading.Tasks;
 using UnityEngine.InputSystem;
 
-public class PistolCooldownState : GunState
+public class GunCooldownState : GunState
 {
     public override void Enter(StateMachine<GunState> newStateMachine)
     {
         base.Enter(newStateMachine);
         Debug.Log("Cooling down");
-        UtilityMethods.UniTaskMethods.DelayedFunction(() => EndCooldown(), gunController.currentGun.gun.cooldownSeconds).Forget();
+        UtilityMethods.UniTaskMethods.DelayedFunction(() => EndCooldown(), gunController.currentGun.gunData.cooldownSeconds).Forget();
     }
 
     private void EndCooldown()
     {
         if (gunController.currentGun.currentBullets > 0)
         {
-            gunController.SubstituteStateWith(this.GetOrAddComponent<PistolReadyState>());
+            gunController.SubstituteStateWith(gunController.currentGunReadyState);
         }
         else
         {
-            gunController.SubstituteStateWith(this.GetOrAddComponent<PistolEmptyState>());
+            gunController.SubstituteStateWith(gunController.currentGunEmptyState);
         }
     }
 
     public override void Reload(InputAction.CallbackContext c)
     {
-        if (gunController.currentGun.currentBullets >= gunController.currentGun.gun.magazineSize) return;
-        gunController.SubstituteStateWith(this.GetOrAddComponent<PistolReloadingState>());
+        if (!gunController.currentGun.CanReload()) return;
+
+        gunController.SubstituteStateWith(gunController.currentGunReloadingState);
     }
 
     public override void Exit()
